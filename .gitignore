@@ -1,0 +1,11 @@
+# 运行时产物（不入库）
+pylibs/
+models/
+framework_kb.sqlite3
+framework_kb.sqlite3-wal
+framework_kb.sqlite3-shm
+.uv-cache/
+.uv-python/
+.venv/
+__pycache__/
+*.pyc

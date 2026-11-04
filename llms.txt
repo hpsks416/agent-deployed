@@ -1,0 +1,12 @@
+# Framework KB — DSH 框架知识库
+
+本机 DSH 框架内容（铁律 AGENTS.md / persona / 全部 skill / meta-drift-log / HANDOFF）的本地可检索知识库（FTS5 + 向量 + RRF），供 agent 按原文检索框架规则，而非靠记忆。
+
+## For AI agents
+
+1. 启动 MCP：`python framework-kb\mcp_server.py`（http://127.0.0.1:8000/mcp）。
+2. 连接：`claude mcp add --transport http framework-kb http://127.0.0.1:8000/mcp`
+3. 先读说明书（MCP resource `tool://skill`，含接地回答契约 + 核验闭环 + 已知坑），再调用 `search`。
+4. 最小任务：`search "先申请后执行"` 或 `search "判重读版本差异"`。
+
+> 或直接跑脚本：`$env:PYTHONPATH="framework-kb\pylibs"; python framework-kb\search_kb.py "查询"`。重建知识库：`python framework-kb\build_kb.py`。
