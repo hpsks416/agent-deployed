@@ -27,3 +27,8 @@ python search_kb.py "先申请后执行" --lexical-only   # 纯关键词，不�
 
 - 运行时：Python 3.11 + numpy + fastembed（已装入 `pylibs/`）
 - 嵌入模型：`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`（多语言，缓存于 `models/`）
+
+## 相关仓库
+
+- [HASHRAP](https://github.com/hpsks416/HASHRAP) — RAG 基础设施（MinerU 混合检索 + eval + MCP + skill），本知识库的构建方法即复用它的管线
+- 框架本体源码：`~/.dsh/AGENTS.md`（铁律）、`~/.dsh/persona.md`（画像）、`~/.dsh/skills/`（全部 skill）、`~/.dsh/meta-drift-log.md`
