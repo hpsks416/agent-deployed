@@ -1,34 +1,30 @@
-# Framework KB — DSH 框架知识库
+# agent-deployed — 经 HASHRAP 转化好的 DSH 框架知识库
 
-把 DSH 框架内容（`AGENTS.md` 铁律、`persona.md` 画像、全部 `SKILL.md`、`meta-drift-log.md`、`HANDOFF.md`）建成本地可检索知识库，让 agent 用「关键词 + 向量 + RRF」找回规则原文，而非靠记忆。
+这里是经 [HASHRAP](https://github.com/hpsks416/HASHRAP) 管线**转化好的框架知识库**：把 DSH 框架内容（`AGENTS.md` 铁律、`persona.md` 画像、全部 `SKILL.md`、`meta-drift-log.md`）建成可检索索引，供 agent 调用框架 / SKILL 前先查原文（铁律三）。
+
+转化方法（`build_kb.py` / `search_kb.py` / `eval` / `mcp`）在 HASHRAP 仓库；本仓库只放转化产物与使用层。
 
 ## 结构
 
-- `build_kb.py` — 收集框架文档 → 分块 → FTS5 关键词索引 + 向量化 → `framework_kb.sqlite3`
-- `search_kb.py` — 检索（FTS5 BM25 + 向量余弦 + RRF 融合）
-- `SKILL.md` — 检索 skill（接地回答契约 + 核验闭环 + 已知坑）
+- `SKILL.md` — `framework-kb` 检索 skill（接地回答契约 + 核验闭环 + 已知坑）
+- `skill-rag/SKILL.md` — 通用 RAG skill
 - `grounded-rag-template.md` — 通用「有据可依」回答模板
-- `pylibs/` — fastembed 等依赖（`pip install --target`）
-- `models/` — 嵌入模型缓存（首次运行自动下载）
+- `llms.txt` — agent 发现入口
+- `mcp_server.py` — MCP server
+- `评估-直接使用框架vs知识库.md` — 直接读框架 vs 查知识库的评估
 
 ## 用法
 
+知识库 `framework_kb.sqlite3` 是构建产物（gitignored），由 HASHRAP 的 `build_kb.py` 在本机生成；检索由 HASHRAP 的 `search_kb.py` 执行：
+
 ```powershell
-# 1) 构建（首次；含向量化，需 pylibs + 模型下载）
-$env:PYTHONPATH = "$PWD\pylibs"
-python build_kb.py
-
-# 2) 检索
-python search_kb.py "判重读版本差异" --top 8
-python search_kb.py "先申请后执行" --lexical-only   # 纯关键词，不加载模型
+python search_kb.py "先申请后执行" --lexical-only --no-rerank
 ```
-
-## 依赖
-
-- 运行时：Python 3.11 + numpy + fastembed（已装入 `pylibs/`）
-- 嵌入模型：`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`（多语言，缓存于 `models/`）
 
 ## 相关仓库
 
-- [HASHRAP](https://github.com/hpsks416/HASHRAP) — RAG 基础设施（MinerU 混合检索 + eval + MCP + skill），本知识库的构建方法即复用它的管线
-- 框架本体源码：`~/.dsh/AGENTS.md`（铁律）、`~/.dsh/persona.md`（画像）、`~/.dsh/skills/`（全部 skill）、`~/.dsh/meta-drift-log.md`
+- [HASHRAP](https://github.com/hpsks416/HASHRAP) — 转化方法（RAG 管线：build / search / eval / mcp）
+
+## License
+
+MIT
