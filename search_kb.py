@@ -39,7 +39,7 @@ def search(query: str, top: int = 8, lexical_only: bool = False, rerank: bool = 
     if not DB.is_file():
         return {"error": "知识库未构建，先跑 build_kb.py"}
     q_terms = list(dict.fromkeys(terms(query)))
-    db = sqlite3.connect(DB)
+    db = sqlite3.connect(f"file:{DB.as_posix()}?mode=ro", uri=True)
 
     rankings = []
     if q_terms:
@@ -79,10 +79,14 @@ def search(query: str, top: int = 8, lexical_only: bool = False, rerank: bool = 
             if row:
                 texts.append((cid, row[0]))
         if texts:
-            model = _reranker()
-            vals = list(model.rerank(query, [t for _, t in texts]))
-            rerank_scores = dict((cid, float(v)) for (cid, _), v in zip(texts, vals))
-            candidates = [cid for cid, _ in sorted(rerank_scores.items(), key=lambda kv: kv[1], reverse=True)]
+            try:
+                model = _reranker()
+                vals = list(model.rerank(query, [t for _, t in texts]))
+            except Exception:
+                vals = None
+            if vals is not None:
+                rerank_scores = dict((cid, float(v)) for (cid, _), v in zip(texts, vals))
+                candidates = [cid for cid, _ in sorted(rerank_scores.items(), key=lambda kv: kv[1], reverse=True)]
 
     shortlist = candidates[:top]
     results = []

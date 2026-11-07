@@ -106,7 +106,7 @@ def build(lexical_only: bool):
 
     DB.unlink(missing_ok=True)
     db = sqlite3.connect(DB)
-    db.execute("PRAGMA journal_mode=WAL")
+    db.execute("PRAGMA journal_mode=DELETE")
     db.execute("CREATE TABLE chunks (id TEXT PRIMARY KEY, source TEXT, tag TEXT, section TEXT, text TEXT)")
     db.execute("CREATE VIRTUAL TABLE search USING fts5(id UNINDEXED, tokens)")
     db.execute("CREATE TABLE vectors (chunk_id TEXT, model TEXT, vector BLOB)")
