@@ -18,6 +18,7 @@ python "G:\CodexDS\DSH\INTRO\framework-kb\search_kb.py" "查询内容" --top 8
 
 ## 接地回答契约（铁律，违反即失效）
 
+0. **先算覆盖率（可回答性检查）**：回答前先看检索命中了几条、覆盖到哪个 section；覆盖不到就明说「知识库里没有这条」+ 反问澄清，不硬答（源自 Auto Ontology 的 check_answerable）。
 1. **只答检索到的原文**：每个结论必须来自 `text` 片段，禁止凭训练记忆补框架规则。
 2. **必引出处**：引用 `source`（如 `AGENTS.md`、`skill:xxx/SKILL.md`）+ `section`，让结论可追溯、可核对。
 3. **规则必带条件**：铁律/约束往往有触发判据和边界（如「先申请后执行」「判重读版本差异」），照原文条件说，不脱条件断章。
