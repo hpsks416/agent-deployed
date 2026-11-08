@@ -1,11 +1,12 @@
 # 运行时产物（不入库）
 pylibs/
 models/
-framework_kb.sqlite3
-framework_kb.sqlite3-wal
-framework_kb.sqlite3-shm
 .uv-cache/
 .uv-python/
 .venv/
 __pycache__/
 *.pyc
+
+# SQLite 临时文件（主库 framework_kb.sqlite3 已入库，可直接 clone 即用）
+framework_kb.sqlite3-wal
+framework_kb.sqlite3-shm
