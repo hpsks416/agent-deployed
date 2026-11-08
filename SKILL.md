@@ -10,8 +10,10 @@ description: 检索本机 DSH 框架知识库（铁律 AGENTS.md、persona 画�
 ## 运行
 
 ```powershell
+# 用框架知识库自带的 .uv-python（与 pylibs ABI 一致），不依赖系统 python / DSH runtime 的 python
+$py = (Get-ChildItem "G:\CodexDS\DSH\INTRO\framework-kb\.uv-python\cpython-*\python.exe" | Select-Object -First 1).FullName
 $env:PYTHONPATH = "G:\CodexDS\DSH\INTRO\framework-kb\pylibs"
-python "G:\CodexDS\DSH\INTRO\framework-kb\search_kb.py" "查询内容" --top 8
+& $py "G:\CodexDS\DSH\INTRO\framework-kb\search_kb.py" "查询内容" --top 8
 ```
 
 返回 JSON：每条 `{source, tag, section, text, score, keyword_hit, vector_hit}`，`source`/`section` 是出处，`text` 是原文片段。

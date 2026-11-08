@@ -29,12 +29,23 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP("framework-kb")
 
 
+def _python() -> str:
+    """返回框架知识库的自包含 Python（.uv-python 优先），保证与 pylibs 的 numpy/fastembed ABI 一致；
+    找不到才退回 sys.executable。避免依赖系统 python 或 DSH runtime 的 python 版本漂移。"""
+    uv_dir = BASE / ".uv-python"
+    if uv_dir.is_dir():
+        for d in sorted(uv_dir.iterdir()):
+            if d.is_dir() and d.name.startswith("cpython-") and (d / "python.exe").is_file():
+                return str(d / "python.exe")
+    return sys.executable
+
+
 def _run(*args: str) -> str:
     env = dict(os.environ)
     env["PYTHONPATH"] = str(BASE / "pylibs")
     env["PYTHONUTF8"] = "1"
     proc = subprocess.run(
-        [sys.executable, str(BASE / "search_kb.py"), *args],
+        [_python(), str(BASE / "search_kb.py"), *args],
         cwd=str(BASE), env=env, capture_output=True, text=True, encoding="utf-8",
     )
     if proc.returncode != 0:
