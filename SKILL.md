@@ -16,6 +16,8 @@ $env:PYTHONPATH = "G:\CodexDS\DSH\INTRO\framework-kb\pylibs"
 & $py "G:\CodexDS\DSH\INTRO\framework-kb\search_kb.py" "查询内容" --top 8
 ```
 
+> ⚠ 告警（2026-11-08 实测）：`PYTHONPATH=...\pylibs` 只能配 `.uv-python` 自带的 cpython；用 DSH runtime 的 python 再配 pylibs 会因 numpy C 扩展 ABI 不匹配 `ImportError`。两种实测可用写法：① 上面这种（`.uv-python` + pylibs）；② 用 DSH runtime python 且**不要设** PYTHONPATH（`cd framework-kb; & '<runtime python>' .\search_kb.py "查询" --top 8`）。
+
 返回 JSON：每条 `{source, tag, section, text, score, keyword_hit, vector_hit}`，`source`/`section` 是出处，`text` 是原文片段。
 
 ## 接地回答契约（铁律，违反即失效）
